@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pushbullet.py";
-  version = "0.11.0";
+  version = "0.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa9dc7bb46e083e3497d46241154f12944a8f540e29d150330ca94db0b453b8d";
+    sha256 = "caeed2788141695aaf6e443131f97fc855f56cebfd7fb9eb1c53498bf00c76cc";
   };
 
   propagatedBuildInputs = [ requests websocket_client python_magic ];
