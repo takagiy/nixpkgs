@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "python-rtmidi";
-  version = "1.4.5";
+  version = "1.4.6";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3dd1909d0f44f03a4191131f1829cac2ee6a94f5a4be2a9606354748e594e704";
+    sha256 = "1f7a8c6f19a56e56c4314cd562b5595ad4be645617655887e319c0c113d510ab";
   };
 
   nativeBuildInputs = [ pkg-config ];
