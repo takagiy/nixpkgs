@@ -19,6 +19,8 @@ stdenv.mkDerivation {
 
   cmakeBuildType = "MinSizeRel";
 
+  patches = optional stdenv.isDarwin ./0001-remove-flto.patch;
+
   buildInputs = [
     libX11
     xorgproto
