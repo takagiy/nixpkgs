@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
+{ lib, stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto }:
 
 stdenv.mkDerivation {
   pname = "wmderland";
@@ -18,6 +18,11 @@ stdenv.mkDerivation {
   cmakeBuildType = "MinSizeRel";
 
   patches = ./0001-remove-flto.patch;
+
+  postPatch = ''
+    substituteInPlace src/util.cc \
+      --replace "notify-send" "${libnotify}/bin/notify-send"
+  '';
 
   buildInputs = [
     libX11
