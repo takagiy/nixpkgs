@@ -12,10 +12,21 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs; [ rofi ];
+      default = with pkgs; [
+        rofi
+        dunst
+        light
+        hsetroot
+        feh
+        rxvt-unicode
+      ];
       example = literalExample ''
         with pkgs; [
           rofi
+          dunst
+          light
+          hsetroot
+          feh
           rxvt-unicode
         ]
       '';
