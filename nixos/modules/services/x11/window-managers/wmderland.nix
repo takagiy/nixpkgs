@@ -10,6 +10,14 @@ in
   options.services.xserver.windowManager.wmderland = {
     enable = mkEnableOption "wmderland";
 
+    extraSessionCommands = mkOption {
+      default = "";
+      type = types.lines;
+      description = ''
+        Sehll commands executed just before wmderland is started.
+      '';
+    };
+
     extraPackages = mkOption {
       type = with types; listOf package;
       default = with pkgs; [
@@ -40,6 +48,8 @@ in
     services.xserver.windowManager.session = singleton {
       name = "wmderland";
       start = ''
+        ${cfg.extraSessionCommands}
+
         ${pkgs.wmderland}/bin/wmderland &
         waitPID=$!
       '';
