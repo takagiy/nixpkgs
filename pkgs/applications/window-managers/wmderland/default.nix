@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
+{ stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto }:
 
 with stdenv.lib;
 
@@ -20,6 +20,11 @@ stdenv.mkDerivation {
   cmakeBuildType = "MinSizeRel";
 
   patches = optional stdenv.isDarwin ./0001-remove-flto.patch;
+
+  postPatch = ''
+    substituteInPlace src/util.cc \
+      --replace "notify-send" "${libnotify}/bin/notify-send"
+  '';
 
   buildInputs = [
     libX11
