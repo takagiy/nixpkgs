@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto }:
+{ stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests }:
 
 with stdenv.lib;
 
@@ -30,6 +30,16 @@ stdenv.mkDerivation {
     libX11
     xorgproto
   ];
+
+  postInstall = ''
+    install -Dm0644 -t $out/share/wmderland/contrib $src/example/config
+    install -Dm0644 -t $out/share/xsessions $src/example/wmderland.desktop
+  '';
+
+  passthru = {
+    tests.basic = nixosTests.wmderland;
+    providedSessions = [ "wmderland" ];
+  };
 
   meta = {
     description = "Modern and minimal X11 tiling window manager";
