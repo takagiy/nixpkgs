@@ -24425,6 +24425,10 @@ julia_15 = callPackage ../development/compilers/julia/1.5.nix {
 
   wmctrl = callPackage ../tools/X11/wmctrl { };
 
+  wmderland = callPackage ../applications/window-managers/wmderland { };
+
+  wmderlandc = callPackage ../applications/window-managers/wmderlandc { };
+
   wmii_hg = callPackage ../applications/window-managers/wmii-hg { };
 
   wofi = callPackage ../applications/misc/wofi { };
