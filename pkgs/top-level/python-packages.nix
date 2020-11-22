@@ -9,18 +9,15 @@
 { pkgs
 , stdenv
 , python
-, overrides ? (self: super: {})
 }:
 
 with pkgs.lib;
 
-let
-  packages = ( self:
+self:
 
 let
+  inherit (self) callPackage;
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
-
-  callPackage = pkgs.newScope self;
 
   namePrefix = python.libPrefix + "-";
 
@@ -102,7 +99,7 @@ in {
 
   inherit (python.passthru) isPy27 isPy35 isPy36 isPy37 isPy38 isPy39 isPy3k isPyPy pythonAtLeast pythonOlder;
   inherit python bootstrapped-pip buildPythonPackage buildPythonApplication;
-  inherit fetchPypi callPackage;
+  inherit fetchPypi;
   inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
   inherit toPythonModule toPythonApplication;
   inherit buildSetupcfg;
@@ -201,6 +198,8 @@ in {
   aioesphomeapi = callPackage ../development/python-modules/aioesphomeapi { };
 
   aioeventlet = callPackage ../development/python-modules/aioeventlet { };
+
+  aioextensions = callPackage ../development/python-modules/aioextensions { };
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
@@ -355,6 +354,8 @@ in {
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   apsw = callPackage ../development/python-modules/apsw { };
+
+  arabic-reshaper = callPackage ../development/python-modules/arabic-reshaper { };
 
   area = callPackage ../development/python-modules/area { };
 
@@ -1988,6 +1989,8 @@ in {
 
   Fabric = callPackage ../development/python-modules/Fabric { };
 
+  fabulous = callPackage ../development/python-modules/fabulous { };
+
   facebook-sdk = callPackage ../development/python-modules/facebook-sdk { };
 
   face = callPackage ../development/python-modules/face { };
@@ -2195,6 +2198,10 @@ in {
 
   flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
+  flatbuffers = callPackage ../development/python-modules/flatbuffers {
+    inherit (pkgs) flatbuffers;
+  };
+
   flexmock = callPackage ../development/python-modules/flexmock { };
 
   flickrapi = callPackage ../development/python-modules/flickrapi { };
@@ -2363,6 +2370,8 @@ in {
     callPackage ../development/python-modules/geopy/2.nix { };
 
   getmac = callPackage ../development/python-modules/getmac { };
+
+  getkey = callPackage ../development/python-modules/getkey { };
 
   gevent = callPackage ../development/python-modules/gevent { };
 
@@ -3512,6 +3521,8 @@ in {
 
   lirc = disabledIf isPy27 (toPythonModule (pkgs.lirc.override { python3 = python; }));
 
+  littleutils = callPackage ../development/python-modules/littleutils { };
+
   livelossplot = callPackage ../development/python-modules/livelossplot { };
 
   livereload = callPackage ../development/python-modules/livereload { };
@@ -3539,8 +3550,6 @@ in {
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
-
-  locustio = callPackage ../development/python-modules/locustio { };
 
   Logbook = callPackage ../development/python-modules/Logbook { };
 
@@ -4018,6 +4027,8 @@ in {
 
   ndg-httpsclient = callPackage ../development/python-modules/ndg-httpsclient { };
 
+  ndjson = callPackage ../development/python-modules/ndjson { };
+
   ndtypes = callPackage ../development/python-modules/ndtypes { };
 
   neo = callPackage ../development/python-modules/neo { };
@@ -4349,7 +4360,10 @@ in {
 
   paperspace = callPackage ../development/python-modules/paperspace { };
 
-  paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
+  openpaperwork-core = callPackage ../applications/office/paperwork/openpaperwork-core.nix { };
+  openpaperwork-gtk = callPackage ../applications/office/paperwork/openpaperwork-gtk.nix { };
+  paperwork-backend = callPackage ../applications/office/paperwork/paperwork-backend.nix { };
+  paperwork-shell = callPackage ../applications/office/paperwork/paperwork-shell.nix { };
 
   papis = callPackage ../development/python-modules/papis { };
 
@@ -5768,9 +5782,13 @@ in {
 
   python-baseconv = callPackage ../development/python-modules/python-baseconv { };
 
+  python-bidi = callPackage ../development/python-modules/python-bidi { };
+
   python-binance = callPackage ../development/python-modules/python-binance { };
 
   python-constraint = callPackage ../development/python-modules/python-constraint { };
+
+  python-crontab = callPackage ../development/python-modules/python-crontab { };
 
   python-ctags3 = callPackage ../development/python-modules/python-ctags3 { };
 
@@ -6737,6 +6755,8 @@ in {
     usePython = true;
   });
 
+  sockjs = callPackage ../development/python-modules/sockjs { };
+
   sockjs-tornado = callPackage ../development/python-modules/sockjs-tornado { };
 
   socksipy-branch = callPackage ../development/python-modules/socksipy-branch { };
@@ -6915,6 +6935,8 @@ in {
 
   sslyze = callPackage ../development/python-modules/sslyze { };
 
+  stack-data = callPackage ../development/python-modules/stack-data { };
+
   starlette = callPackage ../development/python-modules/starlette { };
 
   staticjinja = callPackage ../development/python-modules/staticjinja { };
@@ -7079,6 +7101,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_10;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build_2 = callPackage ../development/python-modules/tensorflow/2 {
@@ -7088,6 +7111,7 @@ in {
     nccl = pkgs.nccl_cudatoolkit_11;
     openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
+    inherit (pkgs) flatbuffers;
   };
 
   tensorflow-build = self.tensorflow-build_1;
@@ -7960,6 +7984,4 @@ in {
 
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
-});
-
-in fix' (extends overrides packages)
+}

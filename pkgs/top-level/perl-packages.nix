@@ -511,10 +511,10 @@ let
     buildInputs = [ DataDump FileWhich Readonly TestDifferences TestTrap ];
     preCheck = "rm t/30cluster.t"; # do not run failing tests
     postInstall = ''
-      mkdir -p $out/etc/bash_completion.d
+      mkdir -p $out/share/bash-completion/completions
       mv $out/bin/clusterssh_bash_completion.dist \
-         $out/etc/bash_completion.d/clusterssh_bash_completion
-      substituteInPlace $out/etc/bash_completion.d/clusterssh_bash_completion \
+         $out/share/bash-completion/completions/clusterssh_bash_completion
+      substituteInPlace $out/share/bash-completion/completions/clusterssh_bash_completion \
          --replace '/bin/true' '${pkgs.coreutils}/bin/true' \
          --replace 'grep' '${pkgs.gnugrep}/bin/grep' \
          --replace 'sed' '${pkgs.gnused}/bin/sed'
@@ -21211,6 +21211,21 @@ let
     };
   };
 
+  TextMultiMarkdown = buildPerlPackage {
+    pname = "Text-MultiMarkdown";
+    version = "1.000035";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/Text-MultiMarkdown-1.000035.tar.gz";
+      sha256 = "2467dd13751dc2979d7c880b24e762952130fdf42a1ed3ee04fdf72d4b52646a";
+    };
+    buildInputs = [ ListMoreUtils TestException ];
+    propagatedBuildInputs = [ HTMLParser TextMarkdown ];
+    meta = {
+      description = "Convert MultiMarkdown syntax to (X)HTML";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   TestNumberDelta = buildPerlPackage {
     pname = "Test-Number-Delta";
     version = "1.06";
@@ -22457,6 +22472,21 @@ let
     propagatedBuildInputs = [ URI ];
     meta = {
       description = "Database of robots.txt-derived permissions";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  WWWTwilioAPI = buildPerlPackage {
+    pname = "WWW-Twilio-API";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SC/SCOTTW/WWW-Twilio-API-0.21.tar.gz";
+      sha256 = "582db53a091f8da3670c037733314f2510af5e8ee0ba42a0e391e2f2e3ca7734";
+    };
+    prePatch = "rm examples.pl";
+    propagatedBuildInputs = [ LWPProtocolhttps ];
+    meta = {
+      description = "Accessing Twilio's REST API with Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
