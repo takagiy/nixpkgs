@@ -1,4 +1,5 @@
 {
+  bashInteractive,
   buildPackages,
   cacert,
   callPackage,
@@ -15,7 +16,6 @@
   moreutils,
   nix,
   pigz,
-  referencesByPopularity,
   rsync,
   runCommand,
   runtimeShell,
@@ -25,11 +25,12 @@
   storeDir ? builtins.storeDir,
   substituteAll,
   symlinkJoin,
-  utillinux,
+  util-linux,
   vmTools,
   writeReferencesToFile,
   writeScript,
   writeText,
+  writeTextDir,
   writePython3,
   system,  # Note: This is the cross system we're compiling for
 }:
@@ -57,21 +58,18 @@ let
     done;
   '';
 
-  # Map nixpkgs architecture to Docker notation
-  # Reference: https://github.com/docker-library/official-images#architectures-other-than-amd64
-  getArch = nixSystem: {
-    aarch64-linux = "arm64v8";
-    armv7l-linux = "arm32v7";
-    x86_64-linux = "amd64";
-    powerpc64le-linux = "ppc64le";
-    i686-linux = "i386";
-  }.${nixSystem} or "Can't map Nix system ${nixSystem} to Docker architecture notation. Please check that your input and your requested build are correct or update the mapping in Nixpkgs.";
+  # The OCI Image specification recommends that configurations use values listed
+  # in the Go Language document for GOARCH.
+  # Reference: https://github.com/opencontainers/image-spec/blob/master/config.md#properties
+  # For the mapping from Nixpkgs system parameters to GOARCH, we can reuse the
+  # mapping from the go package.
+  defaultArch = go.GOARCH;
 
 in
 rec {
 
   examples = callPackage ./examples.nix {
-    inherit buildImage pullImage shadowSetup buildImageWithNixDb;
+    inherit buildImage buildLayeredImage fakeNss pullImage shadowSetup buildImageWithNixDb;
   };
 
   pullImage = let
@@ -83,7 +81,7 @@ rec {
     , imageDigest
     , sha256
     , os ? "linux"
-    , arch ? getArch system
+    , arch ? defaultArch
 
       # This is used to set name to the pulled image
     , finalImageName ? imageName
@@ -205,7 +203,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        nativeBuildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        nativeBuildInputs = [ util-linux e2fsprogs jshon rsync jq ];
       } ''
       mkdir disk
       mkfs /dev/${vmTools.hd}
@@ -499,7 +497,7 @@ rec {
       baseJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
             inherit created config;
-            architecture = getArch system;
+            architecture = defaultArch;
             os = "linux";
           });
           impure = runCommand "${baseName}-config.json"
@@ -685,6 +683,33 @@ rec {
     in
     result;
 
+  # Provide a /etc/passwd and /etc/group that contain root and nobody.
+  # Useful when packaging binaries that insist on using nss to look up
+  # username/groups (like nginx).
+  # /bin/sh is fine to not exist, and provided by another shim.
+  fakeNss = symlinkJoin {
+    name = "fake-nss";
+    paths = [
+      (writeTextDir "etc/passwd" ''
+        root:x:0:0:root user:/var/empty:/bin/sh
+        nobody:x:65534:65534:nobody:/var/empty:/bin/sh
+      '')
+      (writeTextDir "etc/group" ''
+        root:x:0:
+        nobody:x:65534:
+      '')
+      (runCommand "var-empty" {} ''
+        mkdir -p $out/var/empty
+      '')
+    ];
+  };
+
+  # This provides /bin/sh, pointing to bashInteractive.
+  binSh = runCommand "bin-sh" {} ''
+    mkdir -p $out/bin
+    ln -s ${bashInteractive}/bin/bash $out/bin/sh
+  '';
+
   # Build an image and populate its nix database with the provided
   # contents. The main purpose is to be able to use nix commands in
   # the container.
@@ -726,7 +751,7 @@ rec {
       streamScript = writePython3 "stream" {} ./stream_layered_image.py;
       baseJson = writeText "${name}-base.json" (builtins.toJSON {
          inherit config;
-         architecture = getArch system;
+         architecture = defaultArch;
          os = "linux";
       });
 
@@ -772,7 +797,7 @@ rec {
             then tag
             else
               lib.head (lib.strings.splitString "-" (baseNameOf conf.outPath));
-        paths = referencesByPopularity overallClosure;
+        paths = buildPackages.referencesByPopularity overallClosure;
         nativeBuildInputs = [ jq ];
       } ''
         ${if (tag == null) then ''
