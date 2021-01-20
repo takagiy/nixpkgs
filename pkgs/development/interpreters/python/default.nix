@@ -24,7 +24,7 @@ with pkgs;
       pythonPackages = callPackage
         ({ pkgs, stdenv, python, overrides }: let
           pythonPackagesFun = import ../../../top-level/python-packages.nix {
-            inherit stdenv pkgs;
+            inherit stdenv pkgs lib;
             python = self;
           };
           otherSplices = {
@@ -154,10 +154,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "6";
+      patch = "7";
       suffix = "";
     };
-    sha256 = "qeC3nSeqBW65zOjWOkJ7X5urFGXe4/lC3P2yWoL0q4o=";
+    sha256 = "sha256-3cwd8Wu1uHqkLsXSCluQLy0IjKommyjgFZD5enmOxQo=";
     inherit (darwin) configd;
     inherit passthruFun;
   };
@@ -167,10 +167,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "9";
-      patch = "0";
+      patch = "1";
       suffix = "";
     };
-    sha256 = "0m18z05nlmqm1zjw9s0ifgrn1jvjn3jwjg0bpswhjmw5k4yfcwww";
+    sha256 = "1zq3k4ymify5ig739zyvx9s2ainvchxb1zpy139z74krr653y74r";
     inherit (darwin) configd;
     inherit passthruFun;
   };

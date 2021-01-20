@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , autoreconfHook
-, pkgconfig
+, pkg-config
 , enableUdev ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
 , udev ? null
 , libobjc
@@ -13,18 +13,18 @@ assert enableUdev -> udev != null;
 
 stdenv.mkDerivation rec {
   pname = "libusb";
-  version = "1.0.23";
+  version = "1.0.24";
 
   src = fetchFromGitHub {
     owner = "libusb";
     repo = "libusb";
     rev = "v${version}";
-    sha256 = "0mxbpg01kgbk5nh6524b0m4xk7ywkyzmc3yhi5asqcsd3rbhjj98";
+    sha256 = "18ri8ky422hw64zry7bpbarb1m0hiljyf64a0a9y093y7aad38i7";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkg-config autoreconfHook ];
   propagatedBuildInputs =
     stdenv.lib.optional enableUdev udev ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];

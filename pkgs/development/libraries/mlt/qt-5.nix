@@ -9,7 +9,7 @@
 , libvorbis
 , libxml2
 , movit
-, pkgconfig
+, pkg-config
 , sox
 , qtbase
 , qtsvg
@@ -45,7 +45,7 @@ mkDerivation rec {
     libvorbis
     libxml2
     movit
-    pkgconfig
+    pkg-config
     qtbase
     qtsvg
     sox
@@ -74,8 +74,6 @@ mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${getDev qtsvg}/include/QtSvg";
 
   CXXFLAGS = "-std=c++11";
-
-  enableParallelBuilding = true;
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"

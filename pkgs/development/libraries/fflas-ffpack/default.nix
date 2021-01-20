@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, givaro, pkgconfig, blas, lapack
+{ stdenv, fetchFromGitHub, autoreconfHook, givaro, pkg-config, blas, lapack
 , gmpxx
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkgconfig
+    pkg-config
   ] ++ stdenv.lib.optionals doCheck checkInputs;
 
   buildInputs = [ givaro blas lapack ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit version;
-    description = ''Finite Field Linear Algebra Subroutines'';
+    description = "Finite Field Linear Algebra Subroutines";
     license = licenses.lgpl21Plus;
     maintainers = teams.sage.members;
     platforms = platforms.unix;

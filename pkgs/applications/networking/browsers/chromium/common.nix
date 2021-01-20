@@ -7,13 +7,13 @@
 , xdg_utils, yasm, nasm, minizip, libwebp
 , libusb1, pciutils, nss, re2
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkg-config
 , nspr, systemd, kerberos
 , util-linux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
+, libXScrnSaver, libXcursor, libXtst, libxshmfence, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
 , jre8
@@ -39,7 +39,7 @@
 
 buildFun:
 
-with stdenv.lib;
+with lib;
 
 let
   jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
@@ -126,7 +126,7 @@ let
 
     nativeBuildInputs = [
       llvmPackages.lldClang.bintools
-      ninja which python2Packages.python perl pkgconfig
+      ninja which python2Packages.python perl pkg-config
       python2Packages.ply python2Packages.jinja2 nodejs
       gnutar python2Packages.setuptools
     ];
@@ -136,7 +136,7 @@ let
       util-linux alsaLib
       bison gperf kerberos
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU libGL
+      libXScrnSaver libXcursor libXtst libxshmfence libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
       jre
       pipewire_0_2

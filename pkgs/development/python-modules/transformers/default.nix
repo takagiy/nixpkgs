@@ -1,5 +1,5 @@
 { buildPythonPackage
-, stdenv
+, lib, stdenv
 , fetchFromGitHub
 , isPy39
 , cookiecutter
@@ -7,6 +7,7 @@
 , regex
 , requests
 , numpy
+, pandas
 , parameterized
 , protobuf
 , sacremoses
@@ -18,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.0.1";
+  version = "4.1.1";
   disabled = isPy39;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h53a3n6fdrx3ns1h1ip273hzd9pkm9m1qh41si75csb8mi1dq3d";
+    sha256 = "1l1gxdsakjmzsgggypq45pnwm87brhlccjfzafs43460pz0wbd6k";
   };
 
   propagatedBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
   ];
 
   checkInputs = [
+    pandas
     parameterized
     pytestCheckHook
     timeout-decorator
@@ -95,7 +97,7 @@ buildPythonPackage rec {
     "test_tokenizer_identifier_non_existent"
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/huggingface/transformers";
     description = "State-of-the-art Natural Language Processing for TensorFlow 2.0 and PyTorch";
     changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";

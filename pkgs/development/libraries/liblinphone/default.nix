@@ -34,7 +34,7 @@
 , openldap
 , ortp
 , pango
-, pkgconfig
+, pkg-config
 , python
 , readline
 , soci
@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     graphviz
     intltool
     makeWrapper
-    pkgconfig
+    pkg-config
   ];
 
   # Some grammar files needed to be copied too from some dependencies. I suppose
@@ -126,7 +126,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://www.linphone.org/technical-corner/liblinphone";
     description = "Library for SIP calls and instant messaging";
-    license = licenses.gpl3;
+    license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jluttine ];
   };

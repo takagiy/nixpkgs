@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitLab
-, pkgconfig
+, pkg-config
 , meson
 , ninja
 , gusb
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
     meson
     ninja
     gtk-doc
@@ -43,6 +43,8 @@ stdenv.mkDerivation rec {
     glib
     nss
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=array-bounds";
 
   mesonFlags = [
     "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"

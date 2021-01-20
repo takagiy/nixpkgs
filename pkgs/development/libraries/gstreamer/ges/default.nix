@@ -2,7 +2,7 @@
 , fetchurl
 , meson
 , ninja
-, pkgconfig
+, pkg-config
 , python3
 , bash-completion
 , gst-plugins-base
@@ -16,7 +16,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-editing-services";
-  version = "1.18.1";
+  version = "1.18.2";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "09rr5a198p1r9wcbsjl01xg6idkfkgj5h9x7xxywarb5i7qv6g79";
+    sha256 = "0pv2k8zlpn3vv2sdlspi3m63ixcwzi90pjly2ypbkg59ab97rb15";
   };
 
   patches = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pkgconfig
+    pkg-config
     gettext
     gobject-introspection
     gst-devtools

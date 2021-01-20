@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchpatch, tzdata, iana-etc, libcCross
-, pkgconfig
+, pkg-config
 , pcre
 , Security }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zdyf883awaqdzm4r3fs76nbpiqx3iswl2p4qxclw2sl5vvynas5";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ pcre ];
   depsTargetTargetPropagated = lib.optional stdenv.isDarwin Security;
 
@@ -84,7 +84,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    branch = "1.4";
     homepage = "http://golang.org/";
     description = "The Go Programming language";
     license = licenses.bsd3;

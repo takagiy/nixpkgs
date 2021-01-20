@@ -1,11 +1,12 @@
 { lib, stdenv, fetch, cmake, python3, libcxxabi, llvm, fixDarwinDylibNames, version
-, enableShared ? true }:
+, enableShared ? !stdenv.hostPlatform.isStatic
+}:
 
 stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "0ylbkcd38zrrz9xmkq9na3d9s8d96hc286dwfwd73wi205lyc7kc";
+  src = fetch "libcxx" "0gaybwkn76vhakvipxslp7pmv2wm7agxkqwk5f5aizhzc9lzdmcz";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -34,8 +35,6 @@ stdenv.mkDerivation {
       "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
       "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
     ] ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
-
-  enableParallelBuilding = true;
 
   passthru = {
     isLLVM = true;

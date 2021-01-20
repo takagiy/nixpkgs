@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, pkgconfig, python3Packages
+{ lib, stdenv, fetchFromGitHub, cmake, ninja, pkg-config, python3Packages
 , boost, rapidjson, qtbase, qtsvg, igraph, spdlog, wrapQtAppsHook
 , fmt, graphviz, llvmPackages ? null
 }:
@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     shopt -u extglob
   '';
 
-  nativeBuildInputs = [ cmake ninja pkgconfig ];
+  nativeBuildInputs = [ cmake ninja pkg-config ];
   buildInputs = [ qtbase qtsvg boost rapidjson igraph spdlog fmt graphviz wrapQtAppsHook ]
     ++ (with python3Packages; [ python pybind11 ])
-    ++ stdenv.lib.optional stdenv.cc.isClang llvmPackages.openmp;
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
-  cmakeFlags = with stdenv.lib.versions; [
+  cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"
     "-DHAL_VERSION_MAJOR=${major version}"
     "-DHAL_VERSION_MINOR=${minor version}"
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   # the qt mkDerivation - the latter forcibly overrides this.
   cmakeBuildType = "MinSizeRel";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A comprehensive reverse engineering and manipulation framework for gate-level netlists";
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;

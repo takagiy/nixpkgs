@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, mkDerivation, lib, fetchFromGitHub, cmake, pkg-config
 , alsaLib, freetype, libjack2, lame, libogg, libpulseaudio, libsndfile, libvorbis
 , portaudio, portmidi, qtbase, qtdeclarative, qtgraphicaleffects
 , qtquickcontrols2, qtscript, qtsvg, qttools
@@ -31,7 +31,7 @@ mkDerivation rec {
     "--set QML_DISABLE_DISK_CACHE 1"
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
 
   buildInputs = [
     alsaLib libjack2 freetype lame libogg libpulseaudio libsndfile libvorbis
@@ -40,7 +40,7 @@ mkDerivation rec {
     qtscript qtsvg qttools qtwebengine qtxmlpatterns
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
     license = licenses.gpl2;
