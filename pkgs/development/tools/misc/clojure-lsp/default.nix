@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ lib, stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "clojure-lsp";
-  version = "2021.01.16-03.28.20";
+  version = "2021.01.26-22.35.27";
 
   src = fetchurl {
     url = "https://github.com/clojure-lsp/clojure-lsp/releases/download/${version}/${pname}.jar";
-    sha256 = "sha256-dURdgx+uY2zcXwhyhxPYxvUXGMsd25E+4eulYq/jOYo=";
+    sha256 = "sha256-kYxOrallox/LnAdZ4wTWZDlzt5GR0/s6nlG6CO0/pRw=";
   };
 
   dontUnpack = true;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --add-flags "-jar $out/share/java/${pname}.jar"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Language Server Protocol (LSP) for Clojure";
     homepage = "https://github.com/snoe/clojure-lsp";
     license = licenses.mit;

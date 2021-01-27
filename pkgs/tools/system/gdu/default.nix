@@ -1,23 +1,29 @@
 { lib
-, stdenv
 , buildGoModule
 , fetchFromGitHub
+, installShellFiles
 }:
 
 buildGoModule rec {
   pname = "gdu";
-  version = "3.0.0";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "dundee";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sfb8bxvdd8r05d0bgfcaw6dpbky7f4fgf0dbly7k7sgl29hkafy";
+    sha256 = "0ilaywj5vz8lgvm63j2saakhmgb2134idn6l8msbif4lsawlr313";
   };
 
-  vendorSha256 = "0w3k23kly8g9mf8a300xz6bv7g1m2nlp5f112k4viyi9zy6vqbv0";
+  vendorSha256 = "058h71gmgi3n4b697myi5890arzw8fkzmxlm1aiwzyfh3k9iv0wh";
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/dundee/gdu/build.Version=${version}" ];
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage gdu.1
+  '';
 
   # tests fail if the version is set
   doCheck = false;
