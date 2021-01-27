@@ -1,6 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub, cmake, libX11, xorgproto }:
 
 stdenv.mkDerivation {
   pname = "wmderlandc";
@@ -27,8 +25,8 @@ stdenv.mkDerivation {
   meta = {
     description = "A tiny program to interact with wmderland";
     homepage = "https://github.com/aesophor/wmderland/tree/master/ipc-client";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ takagiy ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ takagiy ];
   };
 }

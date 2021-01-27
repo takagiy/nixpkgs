@@ -1,6 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests }:
-
-with stdenv.lib;
+{ lib, stdenv, fetchFromGitHub, cmake, libnotify, libX11, xorgproto, nixosTests }:
 
 stdenv.mkDerivation {
   pname = "wmderland";
@@ -19,7 +17,7 @@ stdenv.mkDerivation {
 
   cmakeBuildType = "MinSizeRel";
 
-  patches = optional stdenv.isDarwin ./0001-remove-flto.patch;
+  patches = ./0001-remove-flto.patch;
 
   postPatch = ''
     substituteInPlace src/util.cc \
@@ -44,8 +42,8 @@ stdenv.mkDerivation {
   meta = {
     description = "Modern and minimal X11 tiling window manager";
     homepage = "https://github.com/aesophor/wmderland";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     platforms = libX11.meta.platforms;
-    maintainers = with maintainers; [ takagiy ];
+    maintainers = with lib.maintainers; [ takagiy ];
   };
 }
